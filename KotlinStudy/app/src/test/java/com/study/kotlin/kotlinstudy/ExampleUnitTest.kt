@@ -23,13 +23,13 @@ class ExampleUnitTest {
 
     @Test
     fun addition_isCorrect() {
-        System.out.println(post.user.userIdx)
+        System.out.println(post.user.Idx)
         assertEquals(4, 2 + 2)
     }
 
     @Test
     fun getUserIdx() {
-        System.out.println(post.user.userIdx)
+        System.out.println(post.user.Idx)
     }
 
 }

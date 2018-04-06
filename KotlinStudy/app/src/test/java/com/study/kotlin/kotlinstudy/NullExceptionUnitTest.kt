@@ -18,7 +18,7 @@ class NullExceptionUnitTest {
 
     @Test
     fun getUserIdx() {
-        System.out.println(post.user.userIdx)
+        System.out.println(post.user.Idx)
     }
 
     @Test
@@ -30,7 +30,7 @@ class NullExceptionUnitTest {
 
     @Test
     fun safetyCallOperator() {
-        System.out.println(post.user?.userIdx ?: "userIdx null")
+        System.out.println(post.user?.Idx ?: "userIdx null")
     }
 
     @Test
@@ -49,7 +49,7 @@ class NullExceptionUnitTest {
     @Test
     fun nonnullAssersion() {
         val post: Post = Post(User("1333"))
-        System.out.println(post.user!!.userIdx)
+        System.out.println(post.user!!.Idx)
     }
 
 }
