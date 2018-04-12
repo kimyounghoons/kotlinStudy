@@ -13,7 +13,7 @@ class NullExceptionUnitTest {
 
     @Before
     fun setUp() {
-        post = Post(User("123"))
+        post = Post("144",User("123"))
     }
 
     @Test
@@ -48,7 +48,7 @@ class NullExceptionUnitTest {
     * */
     @Test
     fun nonnullAssersion() {
-        val post: Post = Post(User("1333"))
+        val post: Post = Post("144",User("1333"))
         System.out.println(post.user!!.Idx)
     }
 

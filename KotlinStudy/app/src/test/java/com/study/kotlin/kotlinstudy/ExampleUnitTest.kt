@@ -18,7 +18,7 @@ class ExampleUnitTest {
 
     @Before
     fun setUp(){
-        post = Post(com.study.kotlin.kotlinstudy.models.User("123"))
+        post = Post("144", User("123"))
     }
 
     @Test
