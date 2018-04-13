@@ -4,8 +4,11 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Toast
 import com.study.kotlin.kotlinstudy.databinding.ActivitySecondBinding
 import com.study.kotlin.kotlinstudy.models.Post
+import io.reactivex.Observable
+import io.reactivex.Observer
 import org.greenrobot.eventbus.EventBus
 
 
@@ -29,6 +32,9 @@ class SecondActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        MainActivity.Source.source?.subscribe(){
+            Toast.makeText(this,it.toString(),Toast.LENGTH_LONG).show()
+        }
         when (v) {
             dataBinding.increase -> {
                 post!!.user.Idx = post!!.user.Idx.toInt().plus(1).toString()

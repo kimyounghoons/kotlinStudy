@@ -9,10 +9,9 @@ import android.widget.Button
 import com.study.kotlin.kotlinstudy.databinding.ActivityMainBinding
 import com.study.kotlin.kotlinstudy.models.Post
 import com.study.kotlin.kotlinstudy.models.User
-import org.greenrobot.eventbus.EventBus
+import io.reactivex.subjects.BehaviorSubject
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
 
 class MainActivity : AppCompatActivity(), Observer, View.OnClickListener {
 
@@ -36,9 +35,11 @@ class MainActivity : AppCompatActivity(), Observer, View.OnClickListener {
         button.setOnClickListener(this)
 
         binding.userIdx.text = post.user.Idx
+        io.reactivex.Observable.just("111").subscribe()
     }
 
     override fun onClick(v: View?) {
+        Source.fromNextToComplete()
         var intent = Intent(this, SecondActivity::class.java)
         intent.putExtra("postIdx", post.Idx)
         startActivity(intent)
@@ -55,5 +56,23 @@ class MainActivity : AppCompatActivity(), Observer, View.OnClickListener {
             post = o
             binding.userIdx.text = post.user.Idx
         }
+    }
+
+    object Source {
+        var source: io.reactivex.Observable<Any>? = null
+        var subject: BehaviorSubject<Any>? = null
+
+        init {
+        }
+
+        fun fromNextToComplete() {
+            source = io.reactivex.Observable.create { it ->
+                run {
+                    it.onNext(100)
+                    it.onComplete()
+                }
+            }
+        }
+
     }
 }

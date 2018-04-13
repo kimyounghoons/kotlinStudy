@@ -39,4 +39,5 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.0.1' // compiler 버전은 그래들 버전과 맞춰 줘야 함
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'org.greenrobot:eventbus:3.1.1'
+    compile 'io.reactivex.rxjava2:rxkotlin:2.0.0'
 }
