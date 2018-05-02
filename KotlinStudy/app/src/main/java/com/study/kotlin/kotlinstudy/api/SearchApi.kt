@@ -12,6 +12,6 @@ interface SearchApi {
     @GET("v2/search/image")
     fun search(
             @Query("query") query: String,
-            @Query("page") page: Int = 1): Call<SearchResponse>
+            @Query("page") page: Int = 1):  Call<SearchResponse>
 
 }
