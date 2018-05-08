@@ -1,11 +1,16 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 26
+
+    dataBinding {
+        enabled true
+    }
+
     defaultConfig {
         applicationId "com.study.kotlin.kotlinstudy"
         minSdkVersion 21
@@ -22,6 +27,7 @@ android {
     }
 }
 
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -34,4 +40,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    kapt 'com.android.databinding:compiler:3.0.1' // compiler 버전은 그래들 버전과 맞춰 줘야 함
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile 'org.greenrobot:eventbus:3.1.1'
+    compile 'io.reactivex.rxjava2:rxkotlin:2.0.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
 }
