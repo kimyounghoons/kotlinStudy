@@ -7,5 +7,10 @@ data class Documents(
         val collection: String,
         val thumbnail_url: String,
         val image_url: String,
-        val display_sitename : String)
+        val width: Integer,
+        val height: Integer,
+        val display_sitename: String,
+        val doc_url: String,
+        val dateTime: String
+)
 
