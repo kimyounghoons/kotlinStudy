@@ -24,5 +24,12 @@ class RetrofitHelper {
                     .client(client)
                     .build()
         }
+        fun getAuthToken(): String{
+            return "cd997e0fe40e406d6c2e8d2bf8a6ce45"
+        }
+
+        fun getFullUrl() : String{
+            return "https://dapi.kakao.com/"
+        }
     }
 }
