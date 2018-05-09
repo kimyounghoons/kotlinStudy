@@ -10,16 +10,15 @@ import com.study.kotlin.kotlinstudy.utils.network.NetworkListener
  */
 class KakaoSearchDAO {
 
-    fun getImageSearch(keyword: String, page: Int?, size: Int?, responseListener: NetworkListener.RetroResopnseListener<ResponseImageSearch>, errorResponseListener: NetworkListener.RetroErrorListener) {
+    fun getImageSearch(keyword: String, page: Int, size: Int, responseListener: NetworkListener.RetroResopnseListener<ResponseImageSearch>, errorResponseListener: NetworkListener.RetroErrorListener) {
         val headers = HashMap<String, Any>()
-        headers.put("Authorization", "KakaoAK " + RetrofitHelper.getAuthToken())
+        headers["Authorization"] = "KakaoAK " + RetrofitHelper.getAuthToken()
 
         val queries = HashMap<String, Any>()
-        queries.put("query", keyword)
+        queries["query"] = keyword
+        queries["size"] = size
 //        queries.put("sort","recency") // accuracy 정확순과 최신순으로 나뉨  default 정확순
-//        if(page!=null) {
-//            queries.put("page",1)
-//        }
+        queries["page"] = 1
         RetrofitHelper.getRetrofit(RetrofitHelper.getFullUrl())
                 .create(KakaoSearchDAOService::class.java)
                 .getImageSearch(headers, queries)
