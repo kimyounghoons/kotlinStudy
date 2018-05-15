@@ -25,7 +25,7 @@ class RetrofitHelper {
                     .build()
         }
         fun getAuthToken(): String{
-            return "61cff82b52c43150874fbe5bae9ef0f5"
+            return "2552da6ec46646ba073dc1c78b858e2d"
         }
 
         fun getFullUrl() : String{

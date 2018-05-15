@@ -37,7 +37,7 @@ private class HeaderSettingInterceptor : Interceptor {
         val chainRequest = chain.request()
 
         val request = chainRequest.newBuilder().apply {
-            addHeader("Authorization", "KakaoAK 50e04803909cff9da49abb7c08254186")
+            addHeader("Authorization", "KakaoAK 2552da6ec46646ba073dc1c78b858e2d")
         }.build()
 
         return chain.proceed(request)
