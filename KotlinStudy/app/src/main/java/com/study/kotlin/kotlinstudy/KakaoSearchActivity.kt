@@ -2,7 +2,7 @@ package com.study.kotlin.kotlinstudy
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.study.kotlin.kotlinstudy.fragments.KakaoSearchFragment
+import com.study.kotlin.kotlinstudy.kakaosearch.KakaoSearchFragment
 
 class KakaoSearchActivity : AppCompatActivity() {
 

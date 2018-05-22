@@ -4,10 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.study.kotlin.kotlinstudy.R
+import kotlinx.android.synthetic.main.item_kakao_search.view.*
 
-class SearchViewHolder(view : View): RecyclerView.ViewHolder(view) {
-    val imageView : ImageView = view.findViewById(R.id.image)
-    val displaySiteName: TextView = view.findViewById(R.id.display_sitename)
-    val thumbnailUrl : TextView = view.findViewById(R.id.thumbnail_url)
+class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val imageView: ImageView = view.image
+    val displaySiteName: TextView = view.display_sitename
+    val thumbnailUrl: TextView = view.thumbnail_url
 }

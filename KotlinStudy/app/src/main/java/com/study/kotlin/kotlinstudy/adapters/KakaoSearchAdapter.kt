@@ -6,17 +6,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.study.kotlin.kotlinstudy.R
-import com.study.kotlin.kotlinstudy.data.Documents
+import com.study.kotlin.kotlinstudy.kakaosearch.AdapterLoadSearchData
+import com.study.kotlin.kotlinstudy.viewholders.EmptyViewHolder
 import com.study.kotlin.kotlinstudy.viewholders.ProgressViewHolder
 import com.study.kotlin.kotlinstudy.viewholders.SearchViewHolder
 
-class KakaoSearchAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var searchList: ArrayList<Documents> = ArrayList()
+class KakaoSearchAdapter(private val context: Context, private val adapterLoadSearchData: AdapterLoadSearchData) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val VIEW_EMPTY = 0
     private val VIEW_ITEM = 1
-    private val VIEW_PROG = 0
+    private val VIEW_PROG = 2
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
+            VIEW_EMPTY ->{
+                val v = LayoutInflater.from(context).inflate(R.layout.layout_kakao_search_item_empty, parent, false)
+                EmptyViewHolder(v)
+            }
             VIEW_ITEM -> {
                 val v = LayoutInflater.from(context).inflate(R.layout.item_kakao_search, parent, false)
                 SearchViewHolder(v)
@@ -29,14 +34,14 @@ class KakaoSearchAdapter(private val context: Context) : RecyclerView.Adapter<Re
     }
 
     override fun getItemCount(): Int {
-        return searchList.size
+        return (adapterLoadSearchData.searchList.size + if (adapterLoadSearchData.isLoading()) 1 else 0)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is SearchViewHolder) {
-            Glide.with(context).load(searchList.get(position).thumbnail_url).into(holder.imageView)
-            holder.displaySiteName.text = searchList.get(position).display_sitename
-            holder.thumbnailUrl.text = searchList.get(position).thumbnail_url
+            Glide.with(context).load(adapterLoadSearchData.searchList[position].thumbnail_url).into(holder.imageView)
+            holder.displaySiteName.text = adapterLoadSearchData.searchList[position].display_sitename
+            holder.thumbnailUrl.text = adapterLoadSearchData.searchList[position].thumbnail_url
         }
 
         if (holder is ProgressViewHolder) {
@@ -45,19 +50,13 @@ class KakaoSearchAdapter(private val context: Context) : RecyclerView.Adapter<Re
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (searchList[position] != null) {
-            return VIEW_ITEM
+        if (adapterLoadSearchData.searchList.size == 0&& !adapterLoadSearchData.isLoading()) {
+            return VIEW_EMPTY
         }
+        if (position < adapterLoadSearchData.searchList.size)
+            return VIEW_ITEM
+
         return VIEW_PROG
-    }
-
-    fun setItems(lists: ArrayList<Documents>) {
-        searchList = lists
-        notifyDataSetChanged()
-    }
-
-    fun addItem(document: Documents){
-        searchList.add(document)
     }
 
 }
