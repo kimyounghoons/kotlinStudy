@@ -11,6 +11,7 @@ data class Documents(
         val height: Integer,
         val display_sitename: String,
         val doc_url: String,
-        val dateTime: String
+        val dateTime: String,
+        var isSelected: Boolean
 )
 

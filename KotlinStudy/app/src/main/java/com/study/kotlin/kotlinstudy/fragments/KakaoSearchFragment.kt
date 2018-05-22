@@ -16,7 +16,6 @@ import com.study.kotlin.kotlinstudy.utils.network.NetworkListener
 import android.support.v7.widget.LinearLayoutManager
 
 
-
 /**
  * Created by younghoon on 2018-05-08.
  */
