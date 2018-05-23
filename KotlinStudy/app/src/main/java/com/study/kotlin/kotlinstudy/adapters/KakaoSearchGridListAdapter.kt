@@ -22,7 +22,7 @@ class KakaoSearchGridListAdapter(val clickListener: () -> Unit) : RecyclerView.A
     private val VIEW_TYPE_FOOTER = 2
 
     private var itemList: ArrayList<Documents> = ArrayList()
-    private lateinit var gridLayoutManager: GridLayoutManager
+    private lateinit var  gridLayoutManager: GridLayoutManager
 
     private var isEditMode: Boolean = false
     private var cellType: Int = VIEW_TYPE_ITEM_GRID
