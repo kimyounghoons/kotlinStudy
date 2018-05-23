@@ -14,7 +14,8 @@
         <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".SecondActivity" />
-        <activity android:name=".KakaoSearchActivity">
+        <activity android:name=".KakaoSearchActivity"/>
+        <activity android:name=".activity.KakaoListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

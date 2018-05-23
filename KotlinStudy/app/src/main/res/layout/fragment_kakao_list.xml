@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.study.kotlin.kotlinstudy.fragments.KakaoSearchGridListFragment">
+    tools:context="com.study.kotlin.kotlinstudy.fragments.KakaoGridListFragment">
 
     <RelativeLayout
         android:id="@+id/layout_header"
@@ -28,17 +28,6 @@
                 android:gravity="center_vertical"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_change"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="변경"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_toLeftOf="@+id/tv_edit"
-                android:layout_marginRight="16dp" />
 
             <TextView
                 android:id="@+id/tv_edit"
@@ -70,12 +59,12 @@
                 android:id="@+id/tv_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@+id/tv_cancel"
                 android:gravity="center_vertical"
                 android:text="삭제"
                 android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_toLeftOf="@+id/tv_cancel"
-                android:layout_marginRight="16dp" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_cancel"

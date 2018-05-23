@@ -1,14 +1,15 @@
 package com.study.kotlin.kotlinstudy.adapters
 
-import android.content.Context
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.study.kotlin.kotlinstudy.R
 import com.study.kotlin.kotlinstudy.data.Documents
+import kotlinx.android.synthetic.main.fragment_kakao_list.*
 import kotlinx.android.synthetic.main.item_footer_view.view.*
 import kotlinx.android.synthetic.main.item_grid_view.view.*
 import kotlinx.android.synthetic.main.item_normal_view.view.*
@@ -16,13 +17,13 @@ import kotlinx.android.synthetic.main.item_normal_view.view.*
 /**
  * Created by yun on 2018. 4. 20..
  */
-class KakaoSearchGridListAdapter(val clickListener: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class KakaoGridListAdapter(val clickListener: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_ITEM_NORMAL = 0
     private val VIEW_TYPE_ITEM_GRID = 1
     private val VIEW_TYPE_FOOTER = 2
 
     private var itemList: ArrayList<Documents> = ArrayList()
-    private lateinit var  gridLayoutManager: GridLayoutManager
+    private lateinit var gridLayoutManager: GridLayoutManager
 
     private var isEditMode: Boolean = false
     private var cellType: Int = VIEW_TYPE_ITEM_GRID
@@ -66,6 +67,7 @@ class KakaoSearchGridListAdapter(val clickListener: () -> Unit) : RecyclerView.A
                         .into(iv_normal_thumbnail)
 
                 tv_title.text = getItem(position).collection
+                tv_sub_title.text = getItem(position).display_sitename
 
                 if (isEditMode) {
                     layout_normal_select.visibility = View.VISIBLE
@@ -146,12 +148,13 @@ class KakaoSearchGridListAdapter(val clickListener: () -> Unit) : RecyclerView.A
         reload()
     }
 
-    fun removeItem() {
+    fun removeItem(tvCount: TextView) {
         var selectedItemList = itemList.filter { it.isSelected == true }
         for (document in selectedItemList) {
             itemList.remove(document)
         }
         setEditMode(false)
+        tvCount.text = String.format("총 %d 개", itemCount)
     }
 
     fun selectAllItem() {
