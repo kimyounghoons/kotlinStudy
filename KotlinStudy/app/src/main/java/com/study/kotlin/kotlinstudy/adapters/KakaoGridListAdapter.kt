@@ -1,15 +1,15 @@
 package com.study.kotlin.kotlinstudy.adapters
 
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.study.kotlin.kotlinstudy.ItemListener
 import com.study.kotlin.kotlinstudy.R
 import com.study.kotlin.kotlinstudy.data.Documents
-import kotlinx.android.synthetic.main.fragment_kakao_list.*
 import kotlinx.android.synthetic.main.item_footer_view.view.*
 import kotlinx.android.synthetic.main.item_grid_view.view.*
 import kotlinx.android.synthetic.main.item_normal_view.view.*
@@ -17,12 +17,14 @@ import kotlinx.android.synthetic.main.item_normal_view.view.*
 /**
  * Created by yun on 2018. 4. 20..
  */
-class KakaoGridListAdapter(val clickListener: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class KakaoGridListAdapter(val itemListener: ItemListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_ITEM_NORMAL = 0
     private val VIEW_TYPE_ITEM_GRID = 1
     private val VIEW_TYPE_FOOTER = 2
 
     private var itemList: ArrayList<Documents> = ArrayList()
+    private var footerItemList: ArrayList<Documents> = ArrayList()
+
     private lateinit var gridLayoutManager: GridLayoutManager
 
     private var isEditMode: Boolean = false
@@ -44,7 +46,7 @@ class KakaoGridListAdapter(val clickListener: () -> Unit) : RecyclerView.Adapter
     }
 
     override fun getItemCount(): Int {
-        return itemList.size
+        return itemList.size + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
@@ -128,8 +130,55 @@ class KakaoGridListAdapter(val clickListener: () -> Unit) : RecyclerView.Adapter
 
         fun bind() {
             with(itemView) {
-                tv_add.setOnClickListener {
-                    clickListener()
+
+                with(recycler_horizontal) {
+                    adapter = listAdapter(footerItemList)
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                }
+
+                if (itemList.isEmpty()) {
+                    layout_empty.visibility = View.VISIBLE
+                    layout_add.visibility = View.GONE
+                    btn_add.setOnClickListener {
+                        itemListener.onAddItemClick()
+                    }
+                } else {
+                    layout_empty.visibility = View.GONE
+                    layout_add.visibility = View.VISIBLE
+                    tv_add.setOnClickListener {
+                        itemListener.onAddItemClick()
+                    }
+                }
+
+            }
+        }
+
+        inner class listAdapter(private val list: List<Documents>) : RecyclerView.Adapter<HorizontalItemViewHolder>() {
+            override fun getItemCount(): Int {
+                return list.size
+            }
+
+            override fun onBindViewHolder(holder: HorizontalItemViewHolder?, position: Int) {
+                holder?.bind(list.get(position))
+            }
+
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalItemViewHolder {
+                return HorizontalItemViewHolder(parent)
+            }
+
+        }
+
+        inner class HorizontalItemViewHolder(parent: ViewGroup) :
+                RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_horizontal_view, parent, false)) {
+
+            fun bind(item: Documents) {
+                with(itemView) {
+                    Glide.with(itemView.context)
+                            .load(item.thumbnail_url)
+                            .into(iv_thumbnail)
+
+                    tv_title.text = item.collection
                 }
             }
         }
@@ -143,23 +192,24 @@ class KakaoGridListAdapter(val clickListener: () -> Unit) : RecyclerView.Adapter
 
     fun getItem(position: Int) = itemList.get(position)
 
+    fun getItems() = itemList
+
     fun addItem(list: List<Documents>) {
         itemList.addAll(list)
         reload()
     }
 
-    fun removeItem(tvCount: TextView) {
+    fun removeItem() {
         var selectedItemList = itemList.filter { it.isSelected == true }
         for (document in selectedItemList) {
             itemList.remove(document)
         }
-        setEditMode(false)
-        tvCount.text = String.format("총 %d 개", itemCount)
+        itemListener.onRemoveItem(itemCount)
     }
 
-    fun selectAllItem() {
+    fun selectAllItem(isChecked: Boolean) {
         for (i in itemList.indices) {
-            itemList[i].isSelected = true
+            itemList[i].isSelected = isChecked
         }
         reload()
     }
@@ -183,6 +233,11 @@ class KakaoGridListAdapter(val clickListener: () -> Unit) : RecyclerView.Adapter
 
     fun setCellType(cellType: Int) {
         this.cellType = cellType
+        reload()
+    }
+
+    fun addFooterItem(list: List<Documents>) {
+        footerItemList.addAll(list)
         reload()
     }
 

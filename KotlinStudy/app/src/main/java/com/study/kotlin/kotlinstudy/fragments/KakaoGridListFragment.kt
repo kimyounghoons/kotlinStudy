@@ -6,9 +6,11 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.study.kotlin.kotlinstudy.ItemListener
 import com.study.kotlin.kotlinstudy.R
 import com.study.kotlin.kotlinstudy.adapters.KakaoGridListAdapter
 import com.study.kotlin.kotlinstudy.dao.KakaoSearchDAO
+import com.study.kotlin.kotlinstudy.data.Documents
 import com.study.kotlin.kotlinstudy.models.responses.ResponseImageSearch
 import com.study.kotlin.kotlinstudy.utils.network.NetworkListener
 import kotlinx.android.synthetic.main.fragment_kakao_list.*
@@ -34,9 +36,7 @@ class KakaoGridListFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gridAdapter = KakaoGridListAdapter {
-            loadData()
-        }
+        gridAdapter = KakaoGridListAdapter(itemListener)
 
         with(recycle_image) {
             adapter = gridAdapter
@@ -46,19 +46,21 @@ class KakaoGridListFragment : Fragment() {
             (layoutManager as GridLayoutManager).spanSizeLookup = gridAdapter.spanSizeLookup
         }
 
-        loadData()
+        loadItems()
+        loadFooterItems()
         initView()
     }
 
-    fun loadData() {
+    private fun loadItems() {
         showProgressBar(true)
 
         KakaoSearchDAO().getImageSearch(query, currentPage, PAGING_LIMIT, object : NetworkListener.RetroResopnseListener<ResponseImageSearch>() {
             override fun onResponse(response: ResponseImageSearch) {
                 currentPage++
                 gridAdapter.addItem(response.documents)
-                tv_count.text = String.format("총 %d 개", gridAdapter.itemCount)
-                showProgressBar(false)
+
+                showItemsCount(gridAdapter.itemCount)
+                processItems(gridAdapter.getItems())
             }
         }, object : NetworkListener.RetroErrorListener() {
             override fun onErrorResponse(errorCode: Int) {
@@ -68,7 +70,27 @@ class KakaoGridListFragment : Fragment() {
         })
     }
 
-    fun initView() {
+    private fun loadFooterItems() {
+        showProgressBar(true)
+
+        KakaoSearchDAO().getImageSearch(query, currentPage, PAGING_LIMIT, object : NetworkListener.RetroResopnseListener<ResponseImageSearch>() {
+            override fun onResponse(response: ResponseImageSearch) {
+                gridAdapter.addFooterItem(response.documents)
+            }
+        }, object : NetworkListener.RetroErrorListener() {
+            override fun onErrorResponse(errorCode: Int) {
+                super.onErrorResponse(errorCode)
+                showProgressBar(false)
+            }
+        })
+    }
+
+    private fun removeItems() {
+        showProgressBar(true)
+        processItems(gridAdapter.getItems())
+    }
+
+    private fun initView() {
         tv_edit.setOnClickListener {
             setEditMode(true)
         }
@@ -76,23 +98,56 @@ class KakaoGridListFragment : Fragment() {
             setEditMode(false)
         }
         tv_delete.setOnClickListener {
-            gridAdapter.removeItem(tv_count)
-            setEditMode(false)
+            gridAdapter.removeItem()
         }
-        tv_all_select.setOnClickListener {
-            gridAdapter.selectAllItem()
+        layout_all.setOnClickListener {
+            var isChecked = !checkbox_all.isChecked
+            checkbox_all.isChecked = isChecked
+            gridAdapter.selectAllItem(isChecked)
         }
     }
 
-    fun setEditMode(isEditMode: Boolean) {
+    private fun processItems(items: ArrayList<Documents>) {
+        showNoItemsViews(items.isEmpty())
+        setEditMode(false)
+        showItemsCount(items.size)
+        showProgressBar(false)
+    }
+
+    private fun setEditMode(isEditMode: Boolean) {
         gridAdapter.setEditMode(isEditMode)
         layout_menu.visibility = if (isEditMode) View.GONE else View.VISIBLE
         layout_menu_edit.visibility = if (isEditMode) View.VISIBLE else View.GONE
+        checkbox_all.isChecked = false
     }
 
-    fun showProgressBar(isShow: Boolean) {
+    private fun showProgressBar(isShow: Boolean) {
         isLoading = isShow
         view_progress.visibility = if (isShow) View.VISIBLE else View.GONE
+    }
+
+    private fun showItemsCount(count: Int) {
+        tv_count.text = String.format("%d items", count)
+    }
+
+    private fun showNoItemsViews(isShow: Boolean) {
+        layout_header.visibility = if (isShow) View.GONE else View.VISIBLE
+    }
+
+    internal var itemListener: ItemListener = object : ItemListener {
+
+        override fun onItemClick() {
+
+        }
+
+        override fun onAddItemClick() {
+            loadItems()
+        }
+
+        override fun onRemoveItem(count: Int) {
+            removeItems()
+        }
+
     }
 
 }
