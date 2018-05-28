@@ -1,5 +1,7 @@
 package com.study.kotlin.kotlinstudy.kakaosearch
 
+import android.util.Log
+
 class KakaoSearchPresenter(var adapterLoadSearchData: AdapterLoadSearchData, var view: KakaoSearchContract.View) : KakaoSearchContract.Presenter {
 
     override fun search(searchText: String) {
@@ -17,6 +19,7 @@ class KakaoSearchPresenter(var adapterLoadSearchData: AdapterLoadSearchData, var
         if (!adapterLoadSearchData.isLoading()) {
             adapterLoadSearchData.search(searchText, object : AdapterLoadSearchData.LoadSearchCallback {
                 override fun notifyItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    Log.d("notifyItemRangeInserted","positionStart : $positionStart,itemCount :$itemCount")
                     view.notifyItemRangeInserted(positionStart, itemCount)
                 }
             })
