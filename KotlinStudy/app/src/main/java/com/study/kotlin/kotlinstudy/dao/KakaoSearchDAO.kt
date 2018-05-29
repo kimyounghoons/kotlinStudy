@@ -18,7 +18,7 @@ class KakaoSearchDAO {
         queries["query"] = keyword
         queries["size"] = size
 //        queries.put("sort","recency") // accuracy 정확순과 최신순으로 나뉨  default 정확순
-        queries["page"] = 1
+        queries["page"] = page
         RetrofitHelper.getRetrofit(RetrofitHelper.getFullUrl())
                 .create(KakaoSearchDAOService::class.java)
                 .getImageSearch(headers, queries)
