@@ -17,7 +17,7 @@
         android:visibility="gone">
 
         <View
-            android:id="@+id/view_selected"
+            android:id="@+id/view_rect_selected"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shape_rect_selected" />

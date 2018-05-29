@@ -6,9 +6,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.study.kotlin.kotlinstudy.ItemListener
+import android.widget.Toast
+import com.study.kotlin.kotlinstudy.listener.ItemListener
 import com.study.kotlin.kotlinstudy.R
-import com.study.kotlin.kotlinstudy.adapters.KakaoGridListAdapter
+import com.study.kotlin.kotlinstudy.adapters.KakaoListAdapter
 import com.study.kotlin.kotlinstudy.dao.KakaoSearchDAO
 import com.study.kotlin.kotlinstudy.data.Documents
 import com.study.kotlin.kotlinstudy.models.responses.ResponseImageSearch
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_kakao_list.*
 class KakaoNormalListFragment : Fragment() {
     private val PAGING_LIMIT: Int = 16
 
-    private lateinit var gridAdapter: KakaoGridListAdapter
+    private lateinit var listAdapter: KakaoListAdapter
 
     private var currentPage: Int = 1
     private var isLoading: Boolean = false
@@ -36,12 +37,12 @@ class KakaoNormalListFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gridAdapter = KakaoGridListAdapter(itemListener)
+        listAdapter = KakaoListAdapter(context, itemListener)
 
         with(recycle_image) {
-            adapter = gridAdapter
+            adapter = listAdapter
             layoutManager = LinearLayoutManager(context)
-            gridAdapter.setCellType(0)
+            listAdapter.setCellType(0)
         }
 
         loadItems()
@@ -55,10 +56,9 @@ class KakaoNormalListFragment : Fragment() {
         KakaoSearchDAO().getImageSearch(query, currentPage, PAGING_LIMIT, object : NetworkListener.RetroResopnseListener<ResponseImageSearch>() {
             override fun onResponse(response: ResponseImageSearch) {
                 currentPage++
-                gridAdapter.addItem(response.documents)
+                listAdapter.addItem(response.documents)
 
-                showItemsCount(gridAdapter.itemCount)
-                processItems(gridAdapter.getItems())
+                processItems(listAdapter.itemCount)
             }
         }, object : NetworkListener.RetroErrorListener() {
             override fun onErrorResponse(errorCode: Int) {
@@ -69,16 +69,13 @@ class KakaoNormalListFragment : Fragment() {
     }
 
     private fun loadFooterItems() {
-        showProgressBar(true)
-
         KakaoSearchDAO().getImageSearch(query, currentPage, PAGING_LIMIT, object : NetworkListener.RetroResopnseListener<ResponseImageSearch>() {
             override fun onResponse(response: ResponseImageSearch) {
-                gridAdapter.addFooterItem(response.documents)
+                listAdapter.addFooterItem(response.documents)
             }
         }, object : NetworkListener.RetroErrorListener() {
             override fun onErrorResponse(errorCode: Int) {
                 super.onErrorResponse(errorCode)
-                showProgressBar(false)
             }
         })
     }
@@ -86,7 +83,7 @@ class KakaoNormalListFragment : Fragment() {
 
     private fun removeItems() {
         showProgressBar(true)
-        processItems(gridAdapter.getItems())
+        processItems(listAdapter.itemCount)
     }
 
     private fun initView() {
@@ -97,24 +94,24 @@ class KakaoNormalListFragment : Fragment() {
             setEditMode(false)
         }
         tv_delete.setOnClickListener {
-            gridAdapter.removeItem()
+            listAdapter.removeItem()
         }
         layout_all.setOnClickListener {
             var isChecked = !checkbox_all.isChecked
             checkbox_all.isChecked = isChecked
-            gridAdapter.selectAllItem(isChecked)
+            listAdapter.selectAllItem(isChecked)
         }
     }
 
-    private fun processItems(items: ArrayList<Documents>) {
-        showNoItemsViews(items.isEmpty())
+    private fun processItems(count: Int) {
+        showNoItemsViews(count == 0)
         setEditMode(false)
-        showItemsCount(items.size)
+        showItemsCount(count)
         showProgressBar(false)
     }
 
     private fun setEditMode(isEditMode: Boolean) {
-        gridAdapter.setEditMode(isEditMode)
+        listAdapter.setEditMode(isEditMode)
         layout_menu.visibility = if (isEditMode) View.GONE else View.VISIBLE
         layout_menu_edit.visibility = if (isEditMode) View.VISIBLE else View.GONE
         checkbox_all.isChecked = false
@@ -136,7 +133,7 @@ class KakaoNormalListFragment : Fragment() {
     internal var itemListener: ItemListener = object : ItemListener {
 
         override fun onItemClick() {
-
+            Toast.makeText(context, "onItemClick", Toast.LENGTH_SHORT).show()
         }
 
         override fun onAddItemClick() {
@@ -146,6 +143,11 @@ class KakaoNormalListFragment : Fragment() {
         override fun onRemoveItem(count: Int) {
             removeItems()
         }
+
+        override fun onFooterItemClick() {
+            Toast.makeText(context, "onFooterItemClick", Toast.LENGTH_SHORT).show()
+        }
+
 
     }
 
