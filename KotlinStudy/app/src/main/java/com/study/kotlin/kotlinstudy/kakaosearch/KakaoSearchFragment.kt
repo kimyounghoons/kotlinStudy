@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import com.study.kotlin.kotlinstudy.R
 import com.study.kotlin.kotlinstudy.adapters.KakaoSearchAdapter
+import com.study.kotlin.kotlinstudy.databinding.FragmentKakaoSearchBinding
 import kotlinx.android.synthetic.main.fragment_kakao_search.*
 
 
@@ -19,17 +20,23 @@ import kotlinx.android.synthetic.main.fragment_kakao_search.*
  * Created by younghoon on 2018-05-08.
  */
 class KakaoSearchFragment : Fragment(), View.OnClickListener, KakaoSearchContract.View {
-    private var presenter: KakaoSearchPresenter? = null
+//    private var presenter: KakaoSearchPresenter? = null
     private lateinit var searchAdapter: KakaoSearchAdapter
+    private lateinit var fragmentKakaoSearchBinding: FragmentKakaoSearchBinding
+    private var kakaoSearchViewModel : KakaoSearchViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = KakaoSearchPresenter(AdapterLoadSearchData(1, ArrayList()), this)
-        searchAdapter = KakaoSearchAdapter(context, presenter?.adapterLoadSearchData!!)
+        kakaoSearchViewModel = KakaoSearchViewModel(AdapterLoadSearchData(1, ArrayList()), this)
+        searchAdapter = KakaoSearchAdapter(context, kakaoSearchViewModel?.adapterLoadSearchData!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_kakao_search, container, false)
+        fragmentKakaoSearchBinding = FragmentKakaoSearchBinding.inflate(inflater,container,false)
+
+        fragmentKakaoSearchBinding.searchViewModel = kakaoSearchViewModel
+
+        return fragmentKakaoSearchBinding.root
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -44,7 +51,7 @@ class KakaoSearchFragment : Fragment(), View.OnClickListener, KakaoSearchContrac
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
                 if (totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    presenter?.loadMore(search_edit.text.toString())
+                    kakaoSearchViewModel?.loadMore(search_edit.text.toString())
                 }
             }
         })
@@ -70,7 +77,7 @@ class KakaoSearchFragment : Fragment(), View.OnClickListener, KakaoSearchContrac
 
 
     override fun onClick(view: View?) {
-        presenter?.search(search_edit.text.toString())
+        kakaoSearchViewModel?.search(search_edit.text.toString())
     }
 
 }
