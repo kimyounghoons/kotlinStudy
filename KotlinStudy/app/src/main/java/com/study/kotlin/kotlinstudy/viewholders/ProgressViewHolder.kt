@@ -1,10 +1,7 @@
 package com.study.kotlin.kotlinstudy.viewholders
 
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.ProgressBar
-import kotlinx.android.synthetic.main.item_progressbar.view.*
+import com.study.kotlin.kotlinstudy.databinding.ItemProgressbarBinding
 
-class ProgressViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val progressbar: ProgressBar = view.progressbar
-}
+class ProgressViewHolder(var itemProgressbarBinding: ItemProgressbarBinding) : RecyclerView.ViewHolder(itemProgressbarBinding.root)

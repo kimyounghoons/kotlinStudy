@@ -1,7 +1,6 @@
 package com.study.kotlin.kotlinstudy.viewholders
 
 import android.support.v7.widget.RecyclerView
-import android.view.View
+import com.study.kotlin.kotlinstudy.databinding.ItemKakaoSearchEmptyBinding
 
-class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-}
+class EmptyViewHolder(var itemKakaoSearchEmptyBinding: ItemKakaoSearchEmptyBinding) : RecyclerView.ViewHolder(itemKakaoSearchEmptyBinding.root)

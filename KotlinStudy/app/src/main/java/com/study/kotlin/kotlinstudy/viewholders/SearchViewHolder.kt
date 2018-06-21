@@ -1,13 +1,17 @@
 package com.study.kotlin.kotlinstudy.viewholders
 
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import kotlinx.android.synthetic.main.item_kakao_search.view.*
+import com.study.kotlin.kotlinstudy.data.Documents
+import com.study.kotlin.kotlinstudy.databinding.ItemKakaoSearchBinding
+import com.study.kotlin.kotlinstudy.kakaosearch.ItemDocumentViewModel
 
-class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val imageView: ImageView = view.image
-    val displaySiteName: TextView = view.display_sitename
-    val thumbnailUrl: TextView = view.thumbnail_url
+class SearchViewHolder(var itemKakaoSearchBinding: ItemKakaoSearchBinding) : RecyclerView.ViewHolder(itemKakaoSearchBinding.root) {
+
+    fun bindDocuments(documents: Documents) {
+        if (itemKakaoSearchBinding.viewModel == null) {
+            itemKakaoSearchBinding.viewModel= ItemDocumentViewModel(documents)
+            return
+        }
+        itemKakaoSearchBinding.viewModel!!.setDocuments(documents)
+    }
 }
